@@ -1,2 +1,5 @@
 kagglehub==0.3.13
 pandas==2.3.2
+pyspark==4.0.1
+jupyter==1.1.1
+seaborn==0.13.2
