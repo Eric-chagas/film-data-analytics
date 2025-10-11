@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:15
+    container_name: tmdb-lakehouse-local
+    restart: always
+    environment:
+      # Local database credentials
+      - POSTGRES_USER=lakehouse
+      - POSTGRES_PASSWORD=lakehouse_pass
+      - POSTGRES_DB=lakehouse_local
+    volumes:
+      # PostgreSQL data persistence volume
+      - postgresql_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - lakehouse_net
+
+networks:
+  lakehouse_net:
+    driver: bridge
+
+volumes:
+  postgresql_data:
