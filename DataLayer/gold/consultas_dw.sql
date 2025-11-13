@@ -1,0 +1,32 @@
+SELECT 
+    NM_TITLE AS "Filme",
+    VL_REVENUE AS "Receita",
+    VL_BUDGET AS "Orçamento",
+    (VL_REVENUE - VL_BUDGET) AS "Lucro",
+    DT_RELEASE::DATE AS "Data de Lançamento"
+FROM warehouse.FCT_MOVIE
+WHERE VL_REVENUE IS NOT NULL AND VL_BUDGET IS NOT NULL AND VL_BUDGET > 5000
+ORDER BY (VL_REVENUE - VL_BUDGET) DESC
+LIMIT 100;
+
+SELECT 
+    g.NM_GENRE AS "Gênero",
+    ROUND(AVG(f.VL_POPULARITY)) AS "Popularidade Média",
+    COUNT(DISTINCT f.CD_MOVIE_NK) AS "Qtd. Filmes"
+FROM warehouse.FCT_MOVIE f
+JOIN warehouse.DIM_GENRE g 
+    ON f.CD_MOVIE_NK = g.FK_MOVIE
+GROUP BY g.NM_GENRE
+ORDER BY "Popularidade Média" DESC;
+
+SELECT 
+    g.NM_GENRE AS "Gênero",
+    ROUND(AVG(f.VL_REVENUE - f.VL_BUDGET), 2) AS "Lucro Médio",
+    SUM(f.VL_REVENUE - f.VL_BUDGET) AS "Lucro Total",
+    COUNT(DISTINCT f.CD_MOVIE_NK) AS "Qtd. Filmes"
+FROM warehouse.FCT_MOVIE f
+JOIN warehouse.DIM_GENRE g 
+    ON f.CD_MOVIE_NK = g.FK_MOVIE
+WHERE f.VL_REVENUE IS NOT NULL AND f.VL_BUDGET IS NOT NULL AND VL_BUDGET > 5000
+GROUP BY g.NM_GENRE
+ORDER BY "Lucro Médio" DESC;
